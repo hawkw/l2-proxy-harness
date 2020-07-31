@@ -96,11 +96,13 @@ export PROXY_DST_SUFFIXES="${PROXY_DST_SUFFIXES:-test.example.com.}"
 export PROXY_DST_NETWORKS="${PROXY_DST_NETWORKS:-}"
 
 proxy_create() {
+  local dir="${REPORTS_DIR}/${RUN_ID}"
   docker create \
     --name="${RUN_ID}-proxy" \
     --network=host \
     --cpus="${PROXY_CPUS:-$(nproc)}" \
     --volume="${PWD}/hosts:/etc/hosts" \
+    --volume="${dir}:/tmp" \
     --env LINKERD2_PROXY_LOG="${PROXY_LOG:-linkerd=info,warn}" \
     --env LINKERD2_PROXY_CONTROL_LISTEN_ADDR="127.0.0.1:$PROXY_ADMIN_PORT" \
     --env LINKERD2_PROXY_IDENTITY_DISABLED=1 \
